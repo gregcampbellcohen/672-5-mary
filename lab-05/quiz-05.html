@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Quiz 05</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <link rel='icon' href='https://newmapsplus.github.io/favicon.ico' type='image/x-icon' />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-size: 100%;
+            font-family: fantasy;
+        }
+
+        #output {
+            width: 80%;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 1.5em;
+            /* Layout properties: center in page with a css hack! */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+        }
+
+        #map {
+            width: 80%;
+            height: 35vh;
+            margin: 10px auto;
+            z-index: 1000;
+        }
+
+        h1 {
+            background-color: yellow;
+            margin: 0 0 10px 0;
+            padding: 25px 0 0 0;
+            line-height: 0.8em;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- The div that holds the output from hiCraters.byElev() -->
+    <div id="map"></div>
+    <div id="output"></div>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+
+    <script>
+        // Which elevation do you want to use? 
+        // Set this variable for minimum elevation.
+        var elevation = 0
+
+        // The craters variable will hold the HTML content/
+        var craters = "<h1>Hawaii volcanic craters</h1>"
+
+        // Object that holds the properties of Hawaii craters.
+        var hiCraters = {
+            "name": "Craters of Hawaii",
+            "features": [{ // an array of objects
+                    "properties": {
+                        "name": "Alae Crater",
+                        "class": "Crater",
+                        "elevation_ft": 3218 
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [19.3657, -155.1927]
+                    }
+                },
+                {
+                    "properties": {
+                        "name": "Aliamanu Crater",
+                        "class": "Crater",
+                        "elevation_ft": 46
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [21.3596, -157.9120]
+                    }
+                },
+                {
+                    "properties": {
+                        "name": "Aloi Crater",
+                        "class": "Crater",
+                        "elevation_ft": 3258
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [19.3648, -155.2083]
+                    }
+                }
+            ],
+            byElev: function (elev) {
+                var myOutput = {}
+                for (var i = 0; i < this.features.length; i++) {
+                    if (this.features[i].properties.elevation_ft > elev) {
+                        myOutput[this.features[i].properties.name] = this.features[i].geometry.coordinates
+                    }
+                }
+                return myOutput
+            }
+        } // End of object declaration
+
+        // Access Hawaii craters based on elevation
+        if (elevation >= 0) {
+            var craterObject = hiCraters.byElev(elevation)
+            craters += `Craters above ${elevation.toLocaleString()}ft above sea level<br>`
+            for (var k in craterObject) { // loop through object properties
+                craters += `${k} @${craterObject[k][0]}&deg;, ${craterObject[k][1]}&deg;<br>`
+            }
+        } else {
+            craters += "No elevation value given"
+        }
+
+        // Display content in output div
+        document.getElementById("output").innerHTML = craters
+
+        // QUESTION 1 ANSWER
+        console.log(hiCraters.features[2].properties.elevation_ft)
+
+        // QUESTION 2 ANSWER
+        // Method
+
+        // QUESTION 3 ANSWER  
+        console.log(hiCraters.byElev(3257))
+
+        // QUESTION 4 ANSWER  
+        hiCraters.features.push({
+                    "properties": {
+                        "name": "Chain of Craters",
+                        "class": "Crater",
+                        "elevation_ft": 3110 
+                    },
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [19.3709116, -155.185318]
+                    }
+        });
+        // QUESTION 5 ANSWER  
+        for (var i = 0; i < hiCraters.features.length; i++) {
+        console.log(hiCraters.features[i].geometry.coordinates);
+        };
+
+        // QUESTION 6 ANSWER
+        // I can't spend any more time on this. I've got a day a week I can do schoolwork, and I just spent an hour and a half tinkering with question 5 because I left {}s open in question 4.
+        
+        var map = L.map('map', {
+            center: [20, -155],
+            zoom: 6,
+        });
+        
+        var basemap_url = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/light_all/{z}/{x}/{y}.png'
+
+        var basemap_attributes = {
+            attribution: '© <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }
+
+        var tiles = L.tileLayer(basemap_url, basemap_attributes).addTo(map);
+
+        for (var i = 0; i < hiCraters.features.length; i++) { 
+        var popup = `<b>${hiCraters.name[i]}</b>`;
+        L.marker(hiCraters.features[i].geometry.coordinates).addTo(map)
+        .bindPopup(popup);
+        }
+    </script>
+
+</body>

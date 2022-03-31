@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<!-- Use the HTML and CSS you developed in module 01 to fill out this template.-->
+
+<head>
+  <meta charset=utf-8 />
+  <title>Lab 05 Work Template</title>
+
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel='icon' href='https://newmapsplus.github.io/favicon.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css" />
+
+  <!-- **************************************************************** -->
+  <!-- Check to make this links to the most current version of Leaflet! -->
+  <!-- **************************************************************** -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+  <!-- **************************************************************** -->
+  
+  <style>
+    /* The map element */
+    #map {
+      width: 100%;
+      height: 500px;
+    }
+
+    /* Add HTML element styles */
+
+
+
+
+
+    /* Change opacity on hover over the icon class */
+
+    .icon:hover {
+      opacity: .8;
+    }
+
+    /* Modify Leaflet's default popup style */
+
+    .leaflet-popup-content h3 {
+     font-family: "Bitter", serif;
+     font-size: 1.3em;
+    margin-bottom: 6px;
+    }
+
+    .leaflet-popup-content p {
+    margin: 3px 0 6px;
+    font-size: 1.1em;
+    }
+
+    .leaflet-popup-content a {
+    font-weight: normal; 
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Places of interest (pois) in New Orleans, LA </h1>
+  </header>
+
+  <section>
+    <div id='map'></div>
+  </section>
+
+  <section>
+
+  </section>
+  <footer>
+    <p>Map authored by me, Greg Campbell-Cohen.</p>
+    <hr>
+
+    <a href="https://newmapsplus.github.io">
+      <img src="https://newmapsplus.github.io/assets/graphics/logo-2018-nmp-75px-h-gray.png" alt="University of Kentucky Geography">
+    </a>
+
+    <a href="https://uky-gis.github.io">
+      <img src="https://newmapsplus.github.io/assets/graphics/logo-2018-geography-75px-h.png" alt="University of Kentucky Geography">
+    </a>
+  </footer>
+  <!-- **************************************************************** -->
+  <!-- Check to make this links to the most current version of Leaflet! -->
+  <!-- **************************************************************** -->
+  <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+  <!-- **************************************************************** -->
+  <script>
+    var map = L.map('map', {
+      center: [29.9584, -90.0619],
+      zoom: 14
+    });
+
+    // Get basemap URL from Leaflet Providers
+    var basemap_url = 'http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png'
+
+    // Get basemap attributes from Leaflet Providers
+    var basemap_attributes = {
+      maxZoom: 18,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    };
+    // requests some map tiles
+    var tiles = L.tileLayer(basemap_url, basemap_attributes);
+
+    map.addLayer(tiles);
+
+    // Begin writing/modifying code for Lab 05 here
+
+
+    var hotspots = [{
+      name: "Mariza",
+      properties: {
+      description: "Italian-inspired fare dished out in an airy loft building with an industrial-chic vibe.",
+      coordinates: [29.9629337, -90.0501008],
+      url: 'http://marizaneworleans.com/',
+      phone: '(504) 598-5700',
+      icon: 'svgs/restaurant-15.svg'
+      }},  
+      {name: "Historic New Orleans Collection",
+      properties: {
+      description: "A museum, research center, and publisher dedicated to the study and preservation of New Orleans history and culture.",
+      coordinates: [29.956925, -90.065737],
+      url: 'https://www.hnoc.org/',
+      phone: '(504) 523-4662',
+      icon: 'svgs/museum-11.svg'
+      }},
+      {name: "Cafe Beignet",
+      properties: {
+      description: "Charming, intimate bistro with Cajun fare, beignets & cafe au lait, plus patio seats.",
+      coordinates: [29.955354, -90.067154],
+      url: 'http://cafebeignet.com/',
+      phone: '(504) 524-5530',
+      icon: 'svgs/restaurant-15.svg'
+      }}]
+    
+    var i = 0
+    // I know this is why the code is breaking further down, but I've not had any success getting rid of it while keeping my markers. Please advise. 
+    var props = hotspots[i].properties;
+
+    var icon = L.icon({
+    iconUrl: props.icon,
+    iconSize: [40, 40],
+    popupAnchor: [0, -22],
+    className: "icon"
+    });
+
+    console.log(hotspots[0]);
+
+    console.log(hotspots[2].name);
+
+    console.log(hotspots[2].properties);
+
+    console.log(hotspots[2].properties.description);
+
+    console.log(hotspots[2].properties.url);
+
+    console.log(hotspots[2].properties.coordinates);
+
+    console.log(props); 
+
+    console.log(props.description);
+
+    console.log(props.url);
+
+    for (var i = 0; i < hotspots.length; i++) { 
+    var popup = `<h3>${hotspots[i].name}</h3>
+    <p>${props.description}</p>
+    <p><b>website</b>: <a href='${props.url}'>${props.url}</a></p>
+    <p><b>phone</b>: ${props.phone}</p>`
+
+    if (hotspots[i].properties.coordinates) {
+    console.log("I have coordinates in this object, so place me!")
+    var marker = L.marker(hotspots[i].properties.coordinates, {
+    icon: icon
+    })
+    .addTo(map)
+    .bindPopup(popup);
+
+    marker.on("mouseover", function() {
+    this.openPopup(); 
+    });
+    marker.on("mouseout", function() {
+    this.closePopup();
+    });
+    }}
+  </script>
+
+</body>
+
+</html>

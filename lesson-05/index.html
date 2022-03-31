@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset=utf-8 />
+  <title>Lesson 05 template</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel='icon' href='https://newmapsplus.github.io/favicon.ico' type='image/x-icon' />
+
+  <style>
+    /* CSS for styles go here */
+
+  </style>
+</head>
+
+<body>
+
+
+  <!-- HTML for page structure goes here-->
+
+
+  <script>
+    const kyCities = {
+    Louisville: 620118,
+    Lexington: 323780,
+    "Bowling Green": 68401
+    } 
+    Object.keys(kyCities) // returns ["Louisville", "Lexington", "Bowling Green"]
+    Object.values(kyCities) // returns [620118, 323780, 68401]
+    Object.entries(kyCities) // [["Louisville", 620118], ["Lexington", 323780], ["Bowling Green", 68401]]
+    Object.entries(kyCities).forEach(([key, value]) => {
+    let myOutput = `${key} has a 2019 population of ${value.toLocaleString()}.`
+    console.log(myOutput)
+    })
+  </script>
+
+</body>
+
+</html>
